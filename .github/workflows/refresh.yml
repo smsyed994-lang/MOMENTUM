@@ -46,7 +46,9 @@ jobs:
         run: |
           git config user.name "momentum-bot"
           git config user.email "momentum-bot@users.noreply.github.com"
-          git add -A data momentum_data_*/snapshots momentum_data_*/changes momentum_data_*/universe.csv 2>/dev/null || true
+          for p in data momentum_data_*/snapshots momentum_data_*/changes momentum_data_*/universe.csv; do
+            if [ -e "$p" ]; then git add -A "$p"; fi
+          done
           if git diff --cached --quiet; then echo "nothing new"; else
             git commit -m "Update data $(date -u +'%Y-%m-%d %H:%M UTC')"
             git pull --rebase origin ${{ github.ref_name }} && git push
