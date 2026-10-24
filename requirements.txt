@@ -1,0 +1,7 @@
+flask
+pandas
+numpy
+scipy
+yfinance
+requests
+lxml

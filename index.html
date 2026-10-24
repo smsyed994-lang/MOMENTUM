@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Momentum</title>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2F6FDE">
+<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+:root{--bg:#F5F7FA;--card:#fff;--ink:#1F2933;--muted:#667585;--line:#E2E7ED;--chip:#EEF2F7;--blue:#2F6FDE;--green:#2E8B57;--red:#C0392B;--amber:#B7791F}
+@media(prefers-color-scheme:dark){:root{--bg:#0F141A;--card:#171E26;--ink:#E6EBF0;--muted:#94A3B3;--line:#2A3541;--chip:#1F2832;--green:#46B07A;--red:#E0594A;--amber:#E0A53A}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1400px;margin:0 auto;padding:18px 16px 60px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+h1{margin:0;font-size:22px}
+.muted{color:var(--muted);font-size:12.5px}
+button,select,input{font:inherit;color:var(--ink)}
+.btn{border:1px solid var(--line);background:var(--chip);border-radius:7px;padding:6px 12px;cursor:pointer}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.status{padding:6px 10px;border-radius:7px;background:var(--card);border:1px solid var(--line);font-size:12.5px}
+.status.err{border-color:var(--red);color:var(--red)}
+.spin{display:inline-block;width:10px;height:10px;border:2px solid var(--line);border-top-color:var(--blue);border-radius:50%;animation:s 1s linear infinite;margin-right:6px;vertical-align:-1px}
+@keyframes s{to{transform:rotate(360deg)}}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+.card .k{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+.card .v{font-size:20px;font-weight:700}.card .s{color:var(--muted);font-size:12px}
+.good{color:var(--green)}.bad{color:var(--red)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tab{border:1px solid var(--line);background:var(--card);padding:6px 13px;border-radius:7px;cursor:pointer}
+.tab.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:12px}
+.tblbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.tblbar input[type=search]{border:1px solid var(--line);background:var(--chip);border-radius:6px;padding:5px 9px;min-width:200px}
+.scroll{overflow:auto;max-height:620px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{position:sticky;top:0;background:var(--chip);padding:6px 9px;text-align:right;white-space:nowrap;cursor:pointer;user-select:none;z-index:1}
+th.l,td.l{text-align:left}
+td{padding:4px 9px;border-top:1px solid var(--line);text-align:right;white-space:nowrap}
+tr:hover td{background:var(--chip)}
+tr.ADD td:first-child{box-shadow:inset 4px 0 var(--green)}tr.REMOVE td:first-child{box-shadow:inset 4px 0 var(--red)}
+.pos{color:var(--green)}.neg{color:var(--red)}.dim{color:var(--muted)}
+td.nt{padding:2px 4px;text-align:left}
+td.nt input{width:200px;border:1px solid transparent;background:transparent;border-radius:5px;padding:3px 6px}
+td.nt input:hover{border-color:var(--line)}td.nt input:focus{outline:none;border-color:var(--blue);background:var(--card)}
+th.nt .x{margin-left:6px;color:var(--muted);cursor:pointer}
+.sbar{display:flex;align-items:center;gap:8px;margin:5px 0}
+.sbar .n{width:240px;font-size:13px}.sbar .b{height:14px;background:var(--blue);border-radius:3px}
+.set{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.set label{font-size:12.5px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.set select,.set input[type=number]{border:1px solid var(--line);background:var(--chip);border-radius:6px;padding:3px 6px}
+.set input[type=number]{width:64px}
+.alert{background:rgba(192,57,43,.12);border:1px solid var(--red);color:var(--red);border-radius:10px;padding:8px 12px;margin-bottom:8px}
+.alert.info{background:rgba(183,121,31,.12);border-color:var(--amber);color:var(--amber)}
+tr.mv-up td{background:rgba(46,139,87,.12)}tr.mv-dn td{background:rgba(192,57,43,.12)}
+.sbar .b.over{background:var(--red)}
+.set input[type=text]{width:46px;border:1px solid var(--line);background:var(--chip);border-radius:6px;padding:3px 6px}
+.set input.wide{width:110px}
+.hmbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:4px 0 10px}
+.hmbar .tab{padding:4px 10px;font-size:12.5px}
+.hmbar label{font-size:12.5px;color:var(--muted);display:flex;gap:5px;align-items:center;margin-left:8px}
+td.hm{text-align:center;font-weight:600;min-width:74px}
+.hmgrp{margin:12px 0 4px;font-weight:600}.hmgrp span{font-weight:400;color:var(--muted);font-size:12.5px;margin-left:6px}
+.tiles{display:flex;flex-wrap:wrap;gap:4px}
+.tile{width:74px;height:46px;border-radius:6px;border:2px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11.5px;line-height:1.25;cursor:default}
+.tile b{font-size:12px}.tile.held{border-color:var(--blue)}.tile.off{opacity:.45}
+.hmleg{font-size:12px;color:var(--muted);margin-top:8px}
+@media(max-width:700px){
+  .wrap{padding:10px 8px 50px}
+  h1{font-size:19px}#sub{display:none}
+  header{align-items:flex-start}.bar{width:100%}.bar .btn,.bar .status{flex:1 1 auto;text-align:center}
+  .cards{grid-template-columns:repeat(2,1fr);gap:8px}.card .v{font-size:17px}
+  .tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}.tab{white-space:nowrap;padding:8px 12px}
+  .btn,select,.tab{min-height:38px}
+  .tblbar{flex-direction:column;align-items:stretch}.tblbar input[type=search]{min-width:0;width:100%}
+  .scroll{max-height:70vh}
+  td.nt input{width:140px}.sbar .n{width:110px;font-size:12px}
+  .set{gap:10px}.set label{width:100%;justify-content:space-between}
+  .tile{width:64px;height:42px}
+}
+</style></head>
+<body><div class="wrap">
+<header>
+  <div><h1>Momentum <select id="market" class="btn" title="Switch market"></select> <span class="muted" id="clock"></span></h1>
+    <div class="muted" id="sub">Prices come from Yahoo Finance and can be delayed about 15 minutes. Educational tool, not investment advice.</div></div>
+  <div class="bar">
+    <span class="status" id="status">starting...</span>
+    <button class="btn primary" id="refresh">Refresh now</button>
+    <button class="btn" id="record" title="Save today's portfolio into the review history (same files as the command-line script)">Save official review</button>
+    <button class="btn" id="gear">Settings</button>
+  </div>
+</header>
+
+<div id="alerts"></div>
+<div class="box" id="settings" style="display:none">
+  <div class="set">
+    <label>Slots <input type="number" id="s_top" min="5" max="100"></label>
+    <label>Sector cap <select id="s_cap"><option value="1">No cap</option><option value="0.2">20%</option><option value="0.25">25%</option><option value="0.3">30%</option><option value="0.4">40%</option><option value="0.5">50%</option></select></label>
+    <label>Weighting <select id="s_w"><option value="equal">Equal</option><option value="invvol">Inverse volatility</option></select></label>
+    <label><input type="checkbox" id="s_mf"> Market filter (index vs 200-day)</label>
+    <label>Auto-refresh <select id="s_auto"><option value="0">Off</option><option value="5">5 min</option><option value="10">10 min</option><option value="15">15 min</option><option value="30">30 min</option><option value="60">60 min</option></select></label>
+    <label><input type="checkbox" id="s_mh"> only during this market's trading hours</label>
+    <label>Capital <input type="number" id="s_capital" class="wide" min="0" step="1000" placeholder="0 = off"> <input type="text" id="s_cur" maxlength="3"></label>
+    <label title="How many units of your capital currency equal 1 unit of the stock price currency. 1 for NSE stocks; for US stocks enter the rupees-per-dollar rate you use.">FX rate <input type="number" id="s_fx" step="0.01" min="0" style="width:80px"></label>
+    <label>Sector alert at <input type="number" id="s_sa" min="10" max="100"> %</label>
+    <label>Rank mover = <input type="number" id="s_ra" min="1" max="200"> places</label>
+    <span id="conn" style="display:none;width:100%"><span class="set">
+      <label title="Your GitHub repo, like yourname/momentum">GitHub repo <input type="text" id="c_repo" style="width:190px" placeholder="yourname/momentum"></label>
+      <label>Branch <input type="text" id="c_branch" style="width:70px" value="main"></label>
+      <label title="Needed for the Refresh button. Stays on this phone only.">Token <input type="password" id="c_token" style="width:170px" placeholder="github_pat_..."></label>
+    </span></span>
+    <button class="btn primary" id="s_save">Save &amp; refresh</button>
+  </div>
+</div>
+
+<div class="cards" id="cards"></div>
+<div class="tabs" id="tabs"></div>
+<div id="panel"></div>
+</div>
+
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const nz=v=>v!=null&&isFinite(v);
+const F={pct:(d=1)=>v=>nz(v)?(v*100).toFixed(d)+"%":"–",spct:(d=1)=>v=>nz(v)?((v>=0?"+":"")+(v*100).toFixed(d)+"%"):"–",
+         num:(d=2)=>v=>nz(v)?v.toFixed(d):"–",int:v=>nz(v)?String(Math.round(v)):"–"};
+const S={hm:{metric:"r3",elig:false},data:null,notes:{columns:["Notes"],data:{}},tab:"holdings",sort:{},q:{},wasRunning:false};
+let STATIC=false;                                  // true when there is no Python server (phone / GitHub Pages)
+const realApi=(u,b)=>fetch(u,b?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)}:{}).then(r=>r.json());
+const api=(u,b)=>STATIC?staticApi(u,b):realApi(u,b);
+
+/* ---------- STATIC MODE: results are produced by GitHub Actions and read from your repo;
+   notes, settings and capital live only in this phone's browser ---------- */
+const LS={get(k,d){try{const v=localStorage.getItem("mom_"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("mom_"+k,JSON.stringify(v))}catch(e){}}};
+const MKTS=[{key:"nse",label:"NSE 500 (India)"},{key:"us",label:"S&P 500 (US)"}];
+const ENGINE_KEYS=["top","max_sector","weighting","market_filter"];
+const SDEF=m=>({top:25,max_sector:m==="nse"?1:0.3,weighting:"equal",market_filter:true,buffer:1.3,max_weight:0.08,auto_minutes:0,market_hours_only:true,capital:0,currency:"₹",fx:m==="nse"?1:0,sector_alert:0.4,rank_alert:10});
+const SS={running:false,msg:"idle",error:null,started:null,data:{},last:{}};
+const curM=()=>LS.get("market","nse");
+const conn=()=>Object.assign({repo:"",token:"",branch:"main"},LS.get("conn",{}));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function ghFetch(path,opt={}){const c=conn(),h=Object.assign({Accept:"application/vnd.github+json"},opt.headers||{});
+  if(c.token) h.Authorization="Bearer "+c.token; return fetch("https://api.github.com"+path,Object.assign({},opt,{headers:h,cache:"no-store"}));}
+async function loadRemote(m){
+  const c=conn(); if(!c.repo) return null; let r;
+  if(c.token) r=await ghFetch(`/repos/${c.repo}/contents/data/${m}.json?ref=${encodeURIComponent(c.branch)}`,{headers:{Accept:"application/vnd.github.raw+json"}});
+  else r=await fetch(`https://raw.githubusercontent.com/${c.repo}/${encodeURIComponent(c.branch)}/data/${m}.json?t=${Date.now()}`,{cache:"no-store"});
+  if(r.status===404) return null;
+  if(!r.ok) throw new Error("GitHub said "+r.status+(r.status===401?" (check your token)":r.status===403?" (rate limit or token permissions)":""));
+  return r.json();
+}
+async function maybeLoad(m,force){
+  const every=SS.data[m]?120000:15000; if(!force&&Date.now()-(SS.last[m]||0)<every) return; SS.last[m]=Date.now();
+  try{const d=await loadRemote(m); if(d){SS.data[m]=d; if(!SS.running) SS.error=null;} else if(conn().repo&&!SS.data[m]&&!SS.running) SS.error="No data yet in that repo. Tap Refresh now (or run the workflow once on GitHub).";}
+  catch(e){ if(!SS.running) SS.error=String(e.message||e); }
+}
+function processResult(d,m){                       // add the parts that depend on YOUR settings (kept on the phone)
+  const s=Object.assign(SDEF(m),LS.get("settings_"+m,{})), res=JSON.parse(JSON.stringify(d.result)); res.settings=s;
+  const cap=+s.capital||0, fx=+s.fx||0;
+  res.holdings.forEach(h=>{h.amt=cap>0?h.w*cap:null; h.shares=(cap>0&&fx>0&&h.px>0)?Math.floor(h.amt/(h.px*fx)):null;});
+  res.changes.forEach(r=>{r.amt=cap>0?r.chg*cap:null; r.tsh=(cap>0&&fx>0&&r.px>0)?Math.trunc(r.amt/(r.px*fx)):null;});
+  res.cards.sector_alert=s.sector_alert; res.cards.alerts=res.sectors.filter(x=>x.w>=s.sector_alert);
+  res.cards.movers=res.holdings.filter(h=>nz(h.rchg)&&Math.abs(h.rchg)>=s.rank_alert).length; return res;
+}
+function tzNow(tz){const p=new Intl.DateTimeFormat("en-GB",{timeZone:tz,weekday:"short",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date()),g=t=>p.find(x=>x.type===t).value;
+  return {wd:g("weekday"),h:+g("hour")%24,mi:+g("minute")};}
+const tzOf=m=>m==="nse"?"Asia/Kolkata":"America/New_York";
+function isOpen(m){const t=tzNow(tzOf(m)); if(t.wd==="Sat"||t.wd==="Sun") return false; const v=t.h*60+t.mi; return m==="nse"?(v>=555&&v<=945):(v>=570&&v<=975);}
+function clockStr(m){const t=tzNow(tzOf(m)); return `${t.wd} ${String(t.h).padStart(2,"0")}:${String(t.mi).padStart(2,"0")} `+(m==="nse"?"IST":"New York");}
+const getN=m=>Object.assign({columns:["Notes"],data:{}},LS.get("notes_"+m,{}));
+async function pushConfig(m){                      // engine settings (slots, sector cap...) are stored in the repo so scheduled runs use them
+  const c=conn(), s=LS.get("settings_"+m,{}), mine={}; ENGINE_KEYS.forEach(k=>{if(k in s) mine[k]=s[k];}); if(!Object.keys(mine).length) return;
+  const g=await ghFetch(`/repos/${c.repo}/contents/config.json?ref=${encodeURIComponent(c.branch)}`); let cfg={},sha;
+  if(g.ok){const j=await g.json(); sha=j.sha; try{cfg=JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,"")))));}catch(e){}}
+  const before=JSON.stringify(cfg[m]||{}); cfg[m]=Object.assign(cfg[m]||{},mine); if(JSON.stringify(cfg[m])===before) return;
+  const body={message:"Update settings from phone",content:btoa(unescape(encodeURIComponent(JSON.stringify(cfg,null,1)))),branch:c.branch}; if(sha) body.sha=sha;
+  const p=await ghFetch(`/repos/${c.repo}/contents/config.json`,{method:"PUT",body:JSON.stringify(body)});
+  if(!p.ok) throw new Error("Could not save settings to GitHub ("+p.status+"). The token needs Contents: read and write.");
+}
+async function runUpdate(m,record){
+  try{
+    const c=conn(); await pushConfig(m); const prev=(SS.data[m]||{}).generated_at||0, t0=Date.now();
+    const r=await ghFetch(`/repos/${c.repo}/actions/workflows/refresh.yml/dispatches`,{method:"POST",body:JSON.stringify({ref:c.branch,inputs:{market:m,record:record?"true":"false"}})});
+    if(r.status!==204) throw new Error("Could not start the update ("+r.status+"). Check the repo name, the token permissions (Actions: read and write) and that Actions is enabled.");
+    SS.msg="GitHub is updating prices (usually 2 to 5 minutes)...";
+    while(Date.now()-t0<12*60*1000){
+      await sleep(15000);
+      const d=await loadRemote(m); if(d&&d.generated_at>prev){SS.data[m]=d; SS.error=null; return;}
+      const rr=await ghFetch(`/repos/${c.repo}/actions/workflows/refresh.yml/runs?per_page=3&event=workflow_dispatch`);
+      if(rr.ok){const j=await rr.json(), run=(j.workflow_runs||[]).find(x=>Date.parse(x.created_at)>=t0-60000);
+        if(run&&run.status==="completed"&&run.conclusion!=="success") throw new Error("The update failed on GitHub (Yahoo may have blocked it). Open the repo's Actions tab and check the latest run.");}
+      SS.msg=`GitHub is updating prices... ${Math.round((Date.now()-t0)/1000)}s`;
+    }
+    throw new Error("Timed out waiting for GitHub. Open the repo's Actions tab to see what happened.");
+  }catch(e){SS.error=String(e.message||e);} finally{SS.running=false;}
+}
+async function staticApi(u,b){
+  const m=curM();
+  if(u==="/api/markets") return {markets:MKTS,active:m};
+  if(u==="/api/market"){ if(SS.running) return {ok:false,error:"An update is running. Wait for it to finish, then switch."}; LS.set("market",b.key); SS.error=null; return {ok:true,active:b.key}; }
+  if(u==="/api/settings"){ if(b) LS.set("settings_"+m,Object.assign(LS.get("settings_"+m,{}),b)); return Object.assign(SDEF(m),LS.get("settings_"+m,{})); }
+  if(u==="/api/notes"){ const n=getN(m);
+    if(b&&b.t&&n.columns.includes(b.col)){const row=n.data[b.t]=n.data[b.t]||{}; if(b.value) row[b.col]=b.value; else delete row[b.col]; LS.set("notes_"+m,n);} return n; }
+  if(u==="/api/columns"){ const n=getN(m), name=String(b.name||"").trim().slice(0,40);
+    if(b.action==="add"&&name&&!n.columns.includes(name)) n.columns.push(name);
+    else if(b.action==="remove"&&n.columns.includes(name)&&n.columns.length>1){n.columns=n.columns.filter(x=>x!==name); Object.values(n.data).forEach(r=>delete r[name]);}
+    LS.set("notes_"+m,n); return n; }
+  if(u==="/api/data"){ await maybeLoad(m,true); const d=SS.data[m]; return {result:d?processResult(d,m):null,finished:d?d.generated_at:null}; }
+  if(u==="/api/status"){ await maybeLoad(m); const d=SS.data[m];
+    return {running:SS.running,msg:SS.msg,error:SS.error,started:SS.started,finished:d?d.generated_at:null,has_data:!!d,market_open:isOpen(m),now:clockStr(m)}; }
+  if(u==="/api/refresh"){ if(SS.running) return {started:false}; const c=conn();
+    if(!c.repo||!c.token){SS.error="Open Settings and enter your GitHub repo and token first."; return {started:false};}
+    SS.running=true; SS.error=null; SS.started=Date.now()/1000; SS.msg="Starting update on GitHub...";
+    runUpdate(m,!!(b&&b.record)); return {started:true}; }
+  return {};
+}
+
+function money(v){const st=S.data&&S.data.settings,cur=st?st.currency:""; return nz(v)?cur+Math.round(v).toLocaleString("en-IN"):"–";}
+function moneyS(v){const st=S.data&&S.data.settings,cur=st?st.currency:""; return nz(v)?(v>=0?"+":"-")+cur+Math.abs(Math.round(v)).toLocaleString("en-IN"):"–";}
+function rch(v){return !nz(v)?"–":v>0?"▲"+Math.round(v):v<0?"▼"+Math.abs(Math.round(v)):"=";}
+function moveClass(r){const t=S.data.settings.rank_alert; return nz(r.rchg)&&Math.abs(r.rchg)>=t?(r.rchg>0?"mv-up":"mv-dn"):"";}
+const TABS=[["holdings","Holdings"],["changes","Changes"],["watch","Watchlist"],["sectors","Sectors"],["perf","Performance"],["heat","Heatmap"],["ranking","Full ranking"]];
+const C=(k,label,fmt,o={})=>({k,label,fmt,...o});
+const COLS={
+  holdings:[C("t","Ticker",null,{l:1}),C("name","Company",null,{l:1}),C("sector","Sector",null,{l:1}),C("w","Weight",F.pct(2)),C("amt","Amount",money),C("shares","Shares",F.int),C("rank","Rank",F.int),C("rchg","Rank Δ",rch,{sg:1}),C("sret","Since review",F.spct(),{sg:1}),
+    C("px","Price",F.num(2)),C("vsma","vs 200dma",F.spct(),{sg:1}),C("r1","1M",F.spct(),{sg:1}),C("r3","3M",F.spct(),{sg:1}),C("r6","6M",F.spct(),{sg:1}),
+    C("vol","Vol",F.pct(0)),C("score","Score",F.num(2)),C("status","Status",null,{l:1})],
+  changes:[C("action","Action",null,{l:1}),C("t","Ticker",null,{l:1}),C("name","Company",null,{l:1}),C("sector","Sector",null,{l:1}),C("old","Old wt",F.pct(2)),
+    C("new","New wt",F.pct(2)),C("chg","Change",F.spct(2),{sg:1}),C("amt","Trade amt",moneyS,{sg:1}),C("tsh","Trade shares",F.int,{sg:1}),C("reason","Reason",null,{l:1})],
+  watch:[C("erank","Elig. rank",F.int),C("t","Ticker",null,{l:1}),C("name","Company",null,{l:1}),C("sector","Sector",null,{l:1}),C("px","Price",F.num(2)),C("rchg","Rank Δ",rch,{sg:1}),
+    C("r1","1M",F.spct(),{sg:1}),C("r3","3M",F.spct(),{sg:1}),C("r6","6M",F.spct(),{sg:1}),C("vol","Vol",F.pct(0)),C("score","Score",F.num(2))],
+  ranking:[C("rank","Rank",F.int),C("rchg","Rank Δ",rch,{sg:1}),C("t","Ticker",null,{l:1}),C("name","Company",null,{l:1}),C("sector","Sector",null,{l:1}),
+    C("held","Held",v=>v?"yes":"",{l:1}),C("eligible","Eligible",v=>v?"yes":"no",{l:1}),C("px","Price",F.num(2)),
+    C("r1","1M",F.spct(),{sg:1}),C("r3","3M",F.spct(),{sg:1}),C("r6","6M",F.spct(),{sg:1}),C("vsma","vs 200dma",F.spct(),{sg:1}),C("vol","Vol",F.pct(0)),C("score","Score",F.num(2))]
+};
+const DEFSORT={holdings:["w",-1],changes:["action",1],watch:["erank",1],ranking:["rank",1]};
+
+function rowsFor(key){const d=S.data; return key==="holdings"?d.holdings:key==="changes"?d.changes:key==="watch"?d.watch:d.universe;}
+
+function drawTable(key){
+  const host=$("#tbl-"+key); if(!host||!S.data) return;
+  const cols=COLS[key], st=S.sort[key]||DEFSORT[key], q=(S.q[key]||"").toLowerCase();
+  let rows=rowsFor(key).slice();
+  const noteOf=(t,c)=>(S.notes.data[t]||{})[c]||"";
+  if(q) rows=rows.filter(r=>[r.t,r.name,r.sector,r.action,r.reason,...S.notes.columns.map(c=>noteOf(r.t,c))].join(" ").toLowerCase().includes(q));
+  rows.sort((a,b)=>{let x=a[st[0]],y=b[st[0]]; if(x==null&&y==null)return 0; if(x==null)return 1; if(y==null)return -1;
+    return (typeof x==="string"?x.localeCompare(y):(x===true||x===false)?(x-y):x-y)*st[1];});
+  const lim=key==="ranking"?600:2000;
+  let h="<table><thead><tr>";
+  cols.forEach(c=>h+=`<th class="${c.l?"l":""}" data-k="${c.k}">${c.label}${st[0]===c.k?(st[1]>0?" ▲":" ▼"):""}</th>`);
+  S.notes.columns.forEach(c=>h+=`<th class="nt l">${esc(c)}<span class="x" data-del="${esc(c)}" title="Remove column">×</span></th>`);
+  h+="</tr></thead><tbody>";
+  rows.slice(0,lim).forEach(r=>{
+    h+=`<tr class="${(r.action||"")+" "+moveClass(r)}">`;
+    cols.forEach(c=>{const v=r[c.k]; let cls=c.l?"l":""; if(c.sg&&nz(v)) cls+=v>0?" pos":v<0?" neg":"";
+      h+=`<td class="${cls}">${esc(c.fmt?c.fmt(v):v)}</td>`;});
+    S.notes.columns.forEach(c=>h+=`<td class="nt"><input data-t="${esc(r.t)}" data-c="${esc(c)}" value="${esc(noteOf(r.t,c))}" placeholder="…"></td>`);
+    h+="</tr>";});
+  host.innerHTML=h+"</tbody></table>";
+  $("#cnt-"+key).textContent=rows.length+" rows"+(rows.length>lim?` (showing ${lim}; use the filter)`:"");
+  host.querySelectorAll("th[data-k]").forEach(th=>th.onclick=()=>{const k=th.dataset.k,cur=S.sort[key]||DEFSORT[key];
+    const col=cols.find(c=>c.k===k); S.sort[key]=[k,cur[0]===k?-cur[1]:(col.l?1:-1)]; drawTable(key);});
+  host.querySelectorAll("[data-del]").forEach(x=>x.onclick=async e=>{e.stopPropagation();
+    if(confirm(`Remove column "${x.dataset.del}" and all its notes?`)){S.notes=await api("/api/columns",{action:"remove",name:x.dataset.del}); drawPanel();}});
+  host.querySelectorAll("td.nt input").forEach(i=>i.onchange=async()=>{
+    const t=i.dataset.t,c=i.dataset.c,v=i.value; (S.notes.data[t]=S.notes.data[t]||{})[c]=v;
+    i.style.borderColor="var(--amber)"; await api("/api/notes",{t,col:c,value:v}); i.style.borderColor="var(--green)"; setTimeout(()=>i.style.borderColor="",600);});
+}
+
+function tableBox(key,title){
+  return `<div class="box"><div class="tblbar"><b>${title}</b><div class="bar"><span class="muted" id="cnt-${key}"></span>
+    <input type="search" id="q-${key}" placeholder="Filter (also searches notes)…" value="${esc(S.q[key]||"")}">
+    <button class="btn" id="addcol-${key}">+ Add column</button></div></div><div class="scroll" id="tbl-${key}"></div></div>`;
+}
+function wireBox(key){
+  $("#q-"+key).oninput=e=>{S.q[key]=e.target.value; drawTable(key);};
+  $("#addcol-"+key).onclick=async()=>{const n=(prompt("New column name (e.g. Thesis, Target, Stop):")||"").trim();
+    if(n){S.notes=await api("/api/columns",{action:"add",name:n}); drawPanel();}};
+  drawTable(key);
+}
+
+const HM=[["r1","1M return",F.spct()],["r3","3M return",F.spct()],["r6","6M return",F.spct()],["vsma","vs 200dma",F.spct()],["score","Score",F.num(2)]];
+function median(a){a=a.filter(nz).sort((x,y)=>x-y); if(!a.length) return null; const m=a.length>>1; return a.length%2?a[m]:(a[m-1]+a[m])/2;}
+function pctile(a,p){a=a.filter(nz).map(Math.abs).sort((x,y)=>x-y); return a.length?a[Math.min(a.length-1,Math.floor(a.length*p))]:1;}
+function heat(v,scale){if(!nz(v)||!scale) return "transparent"; const al=(0.12+0.68*Math.min(1,Math.abs(v)/scale)).toFixed(2); return v>=0?`rgba(46,139,87,${al})`:`rgba(192,57,43,${al})`;}
+function drawHeatmap(p){
+  const U=S.data.universe, mk=S.hm.metric, md=HM.find(m=>m[0]===mk), W={}; S.data.sectors.forEach(x=>W[x.sector]=x.w);
+  const scale={}; HM.forEach(m=>scale[m[0]]=pctile(U.map(u=>u[m[0]]),0.9));
+  const by={}; U.forEach(u=>(by[u.sector]=by[u.sector]||[]).push(u));
+  const rows=Object.entries(by).map(([sec,a])=>({sec,n:a.length,med:Object.fromEntries(HM.map(m=>[m[0],median(a.map(u=>u[m[0]]))])),
+    above:a.filter(u=>nz(u.vsma)&&u.vsma>0).length/a.length, elig:a.filter(u=>u.eligible).length/a.length,
+    held:a.filter(u=>u.held).length, w:W[sec]||0, stocks:a}));
+  rows.sort((x,y)=>(y.med[mk]??-9)-(x.med[mk]??-9));
+  let h=`<div class="box"><b>Sector heatmap</b><div class="muted">Sector figures are the median stock in that sector. Rows are ordered by the metric you pick.</div>
+   <div class="hmbar">${HM.map(m=>`<button class="tab ${m[0]===mk?"on":""}" data-hm="${m[0]}">${m[1]}</button>`).join("")}
+   <label><input type="checkbox" id="hm_el" ${S.hm.elig?"checked":""}> eligible stocks only</label></div>
+   <div class="scroll"><table><thead><tr><th class="l">Sector</th><th>Stocks</th>${HM.map(m=>`<th>${m[1]}</th>`).join("")}<th>Above 200dma</th><th>Eligible</th><th>Held</th><th>Weight</th></tr></thead><tbody>`;
+  rows.forEach(r=>{h+=`<tr><td class="l">${esc(r.sec)}</td><td>${r.n}</td>`+HM.map(m=>`<td class="hm" style="background:${heat(r.med[m[0]],scale[m[0]])}">${m[2](r.med[m[0]])}</td>`).join("")+
+    `<td class="hm" style="background:${heat(r.above-0.5,0.5)}">${F.pct(0)(r.above)}</td><td>${F.pct(0)(r.elig)}</td><td>${r.held||""}</td><td>${r.w?F.pct(1)(r.w):""}</td></tr>`;});
+  h+=`</tbody></table></div></div><div class="box"><b>Every stock by sector: ${md[1]}</b><div class="muted">Blue outline = in your portfolio. Faded = fails a filter. Hover a tile for details.</div>`;
+  rows.forEach(r=>{
+    let a=r.stocks.filter(u=>!S.hm.elig||u.eligible).sort((x,y)=>(y[mk]??-9)-(x[mk]??-9)); if(!a.length) return;
+    h+=`<div class="hmgrp">${esc(r.sec)}<span>${a.length} stocks · median ${md[2](r.med[mk])}</span></div><div class="tiles">`+
+      a.map(u=>`<div class="tile ${u.held?"held":""} ${u.eligible?"":"off"}" style="background:${heat(u[mk],scale[mk])}" title="${esc(u.name)} | rank ${u.rank} | 1M ${F.spct()(u.r1)} 3M ${F.spct()(u.r3)} 6M ${F.spct()(u.r6)}${u.held?" | HELD":""}"><b>${esc(String(u.t).replace(/\.(NS|BO)$/,""))}</b>${md[2](u[mk])}</div>`).join("")+"</div>";});
+  p.innerHTML=h+`<div class="hmleg">Colour strength is scaled so the strongest 10% of moves are fully saturated. Green = up, red = down.</div></div>`;
+  p.querySelectorAll("[data-hm]").forEach(b=>b.onclick=()=>{S.hm.metric=b.dataset.hm; drawPanel();});
+  $("#hm_el").onchange=e=>{S.hm.elig=e.target.checked; drawPanel();};
+}
+
+function drawPerf(p){
+  const P=S.data.perf;
+  if(!P||!P.history.length){
+    p.innerHTML=`<div class="box"><b>Performance since review</b><div class="muted" style="margin-top:6px">${!P?"No saved review yet. Click <b>Save official review</b> once; performance is measured from that day's closing prices onward.":
+      "Your last official review was saved today, so there is nothing to measure yet. Come back after the next trading day."}</div></div>`; return;}
+  const H=P.history, last=H[H.length-1], B=esc(P.bench_label), pc=F.spct(2), sc=v=>nz(v)?(v>0?"pos":v<0?"neg":""):"";
+  const cards=[["Since last review",pc(last.strat),`${last.start} to ${last.end} (${last.days} days)${last.open?"":" · completed"}`,sc(last.strat)],
+    [B,pc(last.bench),"same period",sc(last.bench)],["Excess return",pc(last.excess),"strategy minus index",sc(last.excess)],
+    ["Holdings up",nz(last.hit)?F.pct(0)(last.hit):"–",`of ${last.n} stocks in that portfolio`],
+    ["Cumulative strategy",pc(P.cum_strat),`${H.length} review period${H.length>1?"s":""}`,sc(P.cum_strat)],["Cumulative "+P.bench_label,pc(P.cum_bench),"same dates",sc(P.cum_bench)]];
+  let h=`<div class="cards">`+cards.map(([k,v,s,c])=>`<div class="card"><div class="k">${k}</div><div class="v ${c}">${esc(v)}</div><div class="s">${esc(s)}</div></div>`).join("")+`</div>`;
+  h+=`<div class="box"><b>Growth of 100</b>${perfChart(P.cum,P.bench_label)}</div>`;
+  h+=`<div class="box"><b>Every review period</b><div class="scroll"><table><thead><tr><th class="l">From</th><th class="l">To</th><th>Days</th><th>Stocks</th><th>Cash</th><th>Strategy</th><th>${B}</th><th>Excess</th><th>Stocks up</th></tr></thead><tbody>`+
+    H.slice().reverse().map(r=>`<tr><td class="l">${r.start}</td><td class="l">${r.end}${r.open?" (running)":""}</td><td>${r.days}</td><td>${r.n}</td><td>${F.pct(0)(r.cash)}</td><td class="${sc(r.strat)}">${pc(r.strat)}</td><td class="${sc(r.bench)}">${pc(r.bench)}</td><td class="${sc(r.excess)}">${pc(r.excess)}</td><td>${nz(r.hit)?F.pct(0)(r.hit):"–"}</td></tr>`).join("")+`</tbody></table></div></div>`;
+  const D=P.detail;
+  if(D){h+=`<div class="box"><b>What drove it: portfolio held ${D.start} to ${D.end}</b><div class="muted">Contribution = weight × return, so the column adds up to the strategy return. "Sold" means no longer in today's target portfolio.</div><div class="scroll"><table><thead><tr><th class="l">Ticker</th><th class="l">Company</th><th class="l">Sector</th><th>Weight</th><th>Price then</th><th>Price now</th><th>Return</th><th>Contribution</th><th class="l">Now</th></tr></thead><tbody>`+
+    D.rows.map(r=>`<tr><td class="l">${esc(r.t)}</td><td class="l">${esc(r.name)}</td><td class="l">${esc(r.sector)}</td><td>${F.pct(2)(r.w)}</td><td>${F.num(2)(r.p0)}</td><td>${F.num(2)(r.p1)}</td><td class="${sc(r.ret)}">${pc(r.ret)}</td><td class="${sc(r.contrib)}">${F.spct(2)(r.contrib)}</td><td class="l">${r.held?"held":"sold"}</td></tr>`).join("")+`</tbody></table></div></div>`;}
+  h+=`<div class="muted" style="margin-bottom:12px">How this is measured: each review's target weights are assumed bought at that day's closing prices and held until the next review (or today). Cash earns nothing. Prices include dividends, but there are no trading costs, taxes or slippage, so real results will be lower. A few review periods say very little: judge the strategy over many.</div>`;
+  p.innerHTML=h;
+}
+function perfChart(c,bl){
+  const W=900,Ht=260,m={l:46,r:14,t:14,b:30}; if(c.length<2) return "";
+  const xs=c.map(q=>+new Date(q.date)), x0=Math.min(...xs), x1=Math.max(...xs)||x0+1;
+  const ys=c.flatMap(q=>[q.strat,q.bench]).filter(nz), lo=Math.min(...ys,100), hi=Math.max(...ys,100), pad=(hi-lo)*.1||1, y0=lo-pad, y1=hi+pad;
+  const X=t=>m.l+(t-x0)/((x1-x0)||1)*(W-m.l-m.r), Y=v=>m.t+(1-(v-y0)/(y1-y0))*(Ht-m.t-m.b);
+  const line=(k,col,dash)=>{const pts=c.filter(q=>nz(q[k])).map(q=>[X(+new Date(q.date)),Y(q[k])]);
+    return `<polyline fill="none" stroke="${col}" stroke-width="2.2" ${dash?'stroke-dasharray="5 4"':""} points="${pts.map(p=>p.join(",")).join(" ")}"/>`+pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${col}"/>`).join("");};
+  let g=""; for(let i=0;i<=4;i++){const v=y0+(y1-y0)*i/4; g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${m.l-6}" y="${Y(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)">${v.toFixed(0)}</text>`;}
+  g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${Y(100)}" y2="${Y(100)}" stroke="var(--muted)" stroke-dasharray="2 3"/>`;
+  g+=c.map((q,i)=>(i===0||i===c.length-1||c.length<8)?`<text x="${X(+new Date(q.date))}" y="${Ht-10}" text-anchor="middle" font-size="11" fill="var(--muted)">${q.date.slice(5)}</text>`:"").join("");
+  const e=c[c.length-1];
+  return `<svg viewBox="0 0 ${W} ${Ht}" style="width:100%;height:auto">${g}${line("bench","#8896A5",1)}${line("strat","#2F6FDE",0)}</svg>
+   <div class="muted"><span style="color:#2F6FDE">●</span> Strategy ${e.strat.toFixed(1)} &nbsp; <span style="color:#8896A5">●</span> ${esc(bl)} ${nz(e.bench)?e.bench.toFixed(1):"–"}</div>`;
+}
+
+function drawPanel(){
+  const p=$("#panel"); if(!S.data&&STATIC&&!conn().repo){p.innerHTML=`<div class="box"><b>Connect your GitHub repo</b><div class="muted" style="margin-top:6px">Tap <b>Settings</b>, enter your repo (like yourname/momentum), and a token if you want the Refresh button to work. See PHONE_SETUP.md for the 10-minute setup.</div></div>`; return;}
+  if(!S.data){p.innerHTML=`<div class="box muted">No data yet. The first run downloads about two years of prices for 500 stocks, so it can take a couple of minutes.</div>`; return;}
+  const k=S.tab;
+  if(k==="perf"){drawPerf(p); return;}
+  if(k==="heat"){drawHeatmap(p); return;}
+  if(k==="sectors"){
+    const s=S.data.sectors, mx=Math.max(0.01,...s.map(x=>x.w));
+    p.innerHTML=`<div class="box"><b>Sector concentration of the target portfolio</b><div class="muted" style="margin-bottom:8px">Cash: ${F.pct(1)(S.data.cards.cash)}. Change the sector cap in Settings.</div>`+
+      (s.length?s.map(x=>`<div class="sbar"><div class="n">${esc(x.sector)} <span class="muted">(${x.n})</span></div><div class="b${x.w>=S.data.cards.sector_alert?" over":""}" style="width:${(x.w/mx*55).toFixed(1)}%"></div><b>${F.pct(1)(x.w)}</b></div>`).join(""):"No holdings.")+"</div>";
+    return;}
+  const titles={holdings:`Target portfolio (${S.data.holdings.length} stocks)`,changes:"Changes vs your last official review",watch:"Watchlist: next best eligible stocks, not held",ranking:"Every scored stock"};
+  p.innerHTML=tableBox(k,titles[k]); wireBox(k);
+}
+
+function drawTabs(){
+  $("#tabs").innerHTML=TABS.map(([k,l])=>`<button class="tab ${k===S.tab?"on":""}" data-k="${k}">${l}</button>`).join("");
+  $("#tabs").querySelectorAll(".tab").forEach(b=>b.onclick=()=>{S.tab=b.dataset.k; drawTabs(); drawPanel();});
+}
+
+function drawCards(){
+  const c=S.data&&S.data.cards; if(!c){$("#cards").innerHTML="";return;}
+  const ts=c.top_sector;
+  const cards=[
+    ["Market regime",c.risk_on?"RISK-ON":"RISK-OFF","Market index vs 200-day",c.risk_on?"good":"bad"],
+    ["Holdings",`${c.holdings} / ${c.top}`,"slots filled"],
+    ["Cash",F.pct(1)(c.cash),"unfilled slots + filter"],
+    ["Top sector",ts?F.pct(0)(ts.w):"n/a",ts?ts.sector:"",ts&&ts.w>=(c.sector_alert||0.4)?"bad":""],
+    ["Eligible / scored",`${c.eligible} / ${c.scored}`,"pass every filter"],
+    ["Turnover",c.turnover==null?"initial":F.pct(1)(c.turnover),"vs last review"],
+    ["Prices as of",c.asof,"latest trading day in data"],
+    ["Official review",c.review_due?"DUE":"not due",c.last_review?`last ${c.last_review}, next ${c.next_due}`:"none saved yet",c.review_due?"bad":"good"]];
+  $("#cards").innerHTML=cards.map(([k,v,s,cl])=>`<div class="card"><div class="k">${k}</div><div class="v ${cl||""}">${esc(v)}</div><div class="s">${esc(s)}</div></div>`).join("");
+}
+
+function drawAlerts(){
+  const c=S.data&&S.data.cards, el=$("#alerts"); if(!c){el.innerHTML="";return;}
+  let h="";
+  (c.alerts||[]).forEach(a=>h+=`<div class="alert"><b>Sector concentration:</b> ${esc(a.sector)} is ${F.pct(0)(a.w)} of the portfolio (${a.n} stocks), above your ${F.pct(0)(c.sector_alert)} alert level.</div>`);
+  if(c.movers) h+=`<div class="alert info"><b>${c.movers} holding${c.movers>1?"s":""}</b> moved ${S.data.settings.rank_alert}+ places in the ranking since the last official review (shaded in the Holdings table).</div>`;
+  el.innerHTML=h;
+}
+async function loadData(){
+  const [d,n]=await Promise.all([api("/api/data"),api("/api/notes")]);
+  S.notes=n; if(d.result){S.data=d.result;} drawCards(); drawAlerts(); drawPanel();
+}
+
+async function poll(){
+  try{
+    const s=await api("/api/status");
+    $("#clock").textContent=s.now+(s.market_open?" · market open":" · market closed");
+    const el=$("#status"); el.classList.toggle("err",!!s.error&&!s.running);
+    if(s.running) el.innerHTML=`<span class="spin"></span>${esc(s.msg)}`;
+    else if(s.error) el.textContent="Last run failed: "+s.error;
+    else if(s.finished) el.textContent="Updated "+new Date(s.finished*1000).toLocaleTimeString();
+    else el.textContent=s.has_data?"ready":"no data yet: click Refresh now";
+    $("#refresh").disabled=s.running; $("#record").disabled=s.running||!S.data;
+    if(STATIC&&!s.running&&s.finished&&s.finished!==S.stamp){S.stamp=s.finished; if(S.data) await loadData();}
+    if(S.wasRunning&&!s.running&&!s.error) await loadData();
+    S.wasRunning=s.running;
+    if(!s.running&&!S.data&&s.has_data) await loadData();
+  }catch(e){ $("#status").textContent="server not reachable"; }
+}
+
+$("#refresh").onclick=async()=>{await api("/api/refresh",{}); S.wasRunning=true; poll();};
+$("#record").onclick=async()=>{ if(confirm("Save this portfolio as an official review in the history?")){await api("/api/refresh",{record:true}); S.wasRunning=true; poll();}};
+$("#gear").onclick=()=>{const b=$("#settings"); b.style.display=b.style.display==="none"?"block":"none";};
+$("#s_save").onclick=async()=>{
+  if(STATIC) LS.set("conn",{repo:$("#c_repo").value.trim().replace(/^https?:\/\/github\.com\//,"").replace(/\/$/,""),branch:($("#c_branch").value||"main").trim(),token:$("#c_token").value.trim()});
+  await api("/api/settings",{top:+$("#s_top").value,max_sector:+$("#s_cap").value,weighting:$("#s_w").value,market_filter:$("#s_mf").checked,
+    auto_minutes:+$("#s_auto").value,market_hours_only:$("#s_mh").checked,
+    capital:+$("#s_capital").value||0,currency:$("#s_cur").value||"₹",fx:+$("#s_fx").value||0,sector_alert:(+$("#s_sa").value||40)/100,rank_alert:+$("#s_ra").value||10});
+  $("#settings").style.display="none"; await api("/api/refresh",{}); S.wasRunning=true; poll();};
+
+async function fillSettings(){
+  const s=await api("/api/settings");
+  $("#s_top").value=s.top; $("#s_cap").value=String(s.max_sector); $("#s_w").value=s.weighting; $("#s_mf").checked=s.market_filter;
+  $("#s_capital").value=s.capital||""; $("#s_cur").value=s.currency; $("#s_fx").value=s.fx; $("#s_sa").value=Math.round(s.sector_alert*100); $("#s_ra").value=s.rank_alert;
+  $("#s_auto").value=String(s.auto_minutes); $("#s_mh").checked=s.market_hours_only;
+  if(STATIC){$("#conn").style.display=""; const c=conn(); $("#c_repo").value=c.repo; $("#c_branch").value=c.branch; $("#c_token").value=c.token;
+    $("#s_auto").closest("label").style.display="none"; $("#s_mh").closest("label").style.display="none";}
+}
+$("#market").onchange=async e=>{
+  const r=await api("/api/market",{key:e.target.value});
+  if(!r.ok){alert(r.error); await loadMarkets(); return;}
+  S.data=null; S.wasRunning=false; S.tab="holdings"; drawTabs(); drawCards(); drawAlerts(); drawPanel();
+  await fillSettings(); await loadData();
+  const st=await api("/api/status"); await poll();
+  if(!st.has_data){await api("/api/refresh",{}); S.wasRunning=true; poll();}
+};
+async function loadMarkets(){
+  const m=await api("/api/markets");
+  $("#market").innerHTML=m.markets.map(x=>`<option value="${x.key}">${esc(x.label)}</option>`).join("");
+  $("#market").value=m.active; $("#market").style.display=m.markets.length>1?"":"none";
+}
+(async()=>{
+  try{const r=await fetch("api/status"); STATIC=!(r.ok&&(r.headers.get("content-type")||"").includes("json"));}catch(e){STATIC=true;}
+  if(STATIC) $("#sub").textContent="Updated by GitHub (scheduled and on demand). Your notes and capital stay on this phone. Educational tool, not investment advice.";
+  await loadMarkets(); await fillSettings();
+  drawTabs(); await loadData(); await poll(); setInterval(poll,3000);
+})();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></body></html>

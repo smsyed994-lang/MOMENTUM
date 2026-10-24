@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pkl
+app_choice.json
+webapp_settings.json
+notes.json
+*.tmp
