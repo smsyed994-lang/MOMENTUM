@@ -1,0 +1,53 @@
+name: Refresh momentum data
+
+on:
+  schedule:
+    - cron: "*/30 4-10 * * 1-5"
+    - cron: "*/30 14-20 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      market:
+        description: "nse, us or all"
+        default: "all"
+      record:
+        description: "Save an official review (true/false)"
+        default: "false"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      MARKET: ${{ github.event.schedule == '*/30 4-10 * * 1-5' && 'nse' || github.event.schedule == '*/30 14-20 * * 1-5' && 'us' || inputs.market || 'all' }}
+      RECORD: ${{ inputs.record == 'true' && '1' || '0' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Restore price cache
+        uses: actions/cache@v4
+        with:
+          path: momentum_data_*/price_cache.pkl
+          key: prices-${{ github.run_id }}
+          restore-keys: prices-
+      - name: Run analysis
+        run: python export_results.py
+      - name: Save results and review history
+        run: |
+          git config user.name "momentum-bot"
+          git config user.email "momentum-bot@users.noreply.github.com"
+          git add -A data momentum_data_*/snapshots momentum_data_*/changes momentum_data_*/universe.csv 2>/dev/null || true
+          if git diff --cached --quiet; then echo "nothing new"; else
+            git commit -m "Update data $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git pull --rebase origin ${{ github.ref_name }} && git push
+          fi
