@@ -1,0 +1,27 @@
+ticker,old_weight,new_weight,change,action,security,sector,reason
+MPC,0.0,0.04,0.04,ADD,Marathon Petroleum,Energy,entered at eligible rank 1
+PSX,0.0,0.04,0.04,ADD,Phillips 66,Energy,entered at eligible rank 2
+VEEV,0.0,0.04,0.04,ADD,Veeva Systems,Health Care,entered at eligible rank 3
+AES,0.0,0.04,0.04,ADD,AES Corporation,Utilities,entered at eligible rank 4
+CRL,0.0,0.04,0.04,ADD,Charles River Laboratories,Health Care,entered at eligible rank 5
+RVTY,0.0,0.04,0.04,ADD,Revvity,Health Care,entered at eligible rank 6
+VLO,0.0,0.04,0.04,ADD,Valero Energy,Energy,entered at eligible rank 7
+ADP,0.0,0.04,0.04,ADD,Automatic Data Processing,Industrials,entered at eligible rank 8
+ACN,0.0,0.04,0.04,ADD,Accenture,Information Technology,entered at eligible rank 9
+CVX,0.0,0.04,0.04,ADD,Chevron Corporation,Energy,entered at eligible rank 10
+HAS,0.0,0.04,0.04,ADD,Hasbro,Consumer Discretionary,entered at eligible rank 11
+APA,0.0,0.04,0.04,ADD,APA Corporation,Energy,entered at eligible rank 12
+V,0.0,0.04,0.04,ADD,Visa Inc.,Financials,entered at eligible rank 13
+BDX,0.0,0.04,0.04,ADD,Becton Dickinson,Health Care,entered at eligible rank 14
+NTAP,0.0,0.04,0.04,ADD,NetApp,Information Technology,entered at eligible rank 15
+TECH,0.0,0.04,0.04,ADD,Bio-Techne,Health Care,entered at eligible rank 16
+NOW,0.0,0.04,0.04,ADD,ServiceNow,Information Technology,entered at eligible rank 17
+COP,0.0,0.04,0.04,ADD,ConocoPhillips,Energy,entered at eligible rank 18
+ABBV,0.0,0.04,0.04,ADD,AbbVie,Health Care,entered at eligible rank 19
+MTD,0.0,0.04,0.04,ADD,Mettler Toledo,Health Care,entered at eligible rank 20
+MA,0.0,0.04,0.04,ADD,Mastercard,Financials,entered at eligible rank 27
+CTSH,0.0,0.04,0.04,ADD,Cognizant,Information Technology,entered at eligible rank 28
+XOM,0.0,0.04,0.04,ADD,ExxonMobil,Energy,entered at eligible rank 29
+IFF,0.0,0.04,0.04,ADD,International Flavors & Fragrances,Materials,entered at eligible rank 30
+FTNT,0.0,0.04,0.04,ADD,Fortinet,Information Technology,entered at eligible rank 33
+CASH,0.0,0.0,0.0,CASH,Cash,Cash,
