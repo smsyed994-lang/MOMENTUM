@@ -1,0 +1,27 @@
+ticker,old_weight,new_weight,change,action,security,sector,reason
+CUPID.NS,0.0,0.02,0.02,ADD,Cupid Ltd.,Fast Moving Consumer Goods,entered at eligible rank 1
+STLTECH.NS,0.0,0.02,0.02,ADD,Sterlite Technologies Ltd.,Telecommunication,entered at eligible rank 2
+LAURUSLABS.NS,0.0,0.02,0.02,ADD,Laurus Labs Ltd.,Healthcare,entered at eligible rank 3
+COFORGE.NS,0.0,0.02,0.02,ADD,Coforge Ltd.,Information Technology,entered at eligible rank 4
+WELCORP.NS,0.0,0.02,0.02,ADD,Welspun Corp Ltd.,Capital Goods,entered at eligible rank 5
+CYIENT.NS,0.0,0.02,0.02,ADD,Cyient Ltd.,Information Technology,entered at eligible rank 6
+PVRINOX.NS,0.0,0.02,0.02,ADD,PVR INOX Ltd.,Media Entertainment & Publication,entered at eligible rank 7
+HFCL.NS,0.0,0.02,0.02,ADD,HFCL Ltd.,Telecommunication,entered at eligible rank 8
+WELSPUNLIV.NS,0.0,0.02,0.02,ADD,Welspun Living Ltd.,Textiles,entered at eligible rank 9
+DIVISLAB.NS,0.0,0.02,0.02,ADD,Divi's Laboratories Ltd.,Healthcare,entered at eligible rank 10
+PTCIL.NS,0.0,0.02,0.02,ADD,PTC Industries Ltd.,Capital Goods,entered at eligible rank 11
+GLAND.NS,0.0,0.02,0.02,ADD,Gland Pharma Ltd.,Healthcare,entered at eligible rank 12
+TECHM.NS,0.0,0.02,0.02,ADD,Tech Mahindra Ltd.,Information Technology,entered at eligible rank 13
+ANANDRATHI.NS,0.0,0.02,0.02,ADD,Anand Rathi Wealth Ltd.,Financial Services,entered at eligible rank 14
+REDINGTON.NS,0.0,0.02,0.02,ADD,Redington Ltd.,Services,entered at eligible rank 15
+KOTAKBANK.NS,0.0,0.02,0.02,ADD,Kotak Mahindra Bank Ltd.,Financial Services,entered at eligible rank 16
+SHYAMMETL.NS,0.0,0.02,0.02,ADD,Shyam Metalics and Energy Ltd.,Capital Goods,entered at eligible rank 17
+HEXT.NS,0.0,0.02,0.02,ADD,Hexaware Technologies Ltd.,Information Technology,entered at eligible rank 18
+HCLTECH.NS,0.0,0.02,0.02,ADD,HCL Technologies Ltd.,Information Technology,entered at eligible rank 19
+CPPLUS.NS,0.0,0.02,0.02,ADD,Aditya Infotech Ltd.,Capital Goods,entered at eligible rank 20
+SANSERA.NS,0.0,0.02,0.02,ADD,Sansera Engineering Ltd.,Automobile and Auto Components,entered at eligible rank 21
+INDHOTEL.NS,0.0,0.02,0.02,ADD,Indian Hotels Co. Ltd.,Consumer Services,entered at eligible rank 22
+LTTS.NS,0.0,0.02,0.02,ADD,L&T Technology Services Ltd.,Information Technology,entered at eligible rank 23
+PAYTM.NS,0.0,0.02,0.02,ADD,One 97 Communications Ltd.,Financial Services,entered at eligible rank 24
+CRAFTSMAN.NS,0.0,0.02,0.02,ADD,Craftsman Automation Ltd.,Automobile and Auto Components,entered at eligible rank 25
+CASH,0.0,0.5,0.5,CASH,Cash,Cash,
