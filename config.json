@@ -6,9 +6,9 @@
   "market_filter": true
  },
  "us": {
-  "top": 25,
+  "top": 10,
   "max_sector": 0.3,
-  "weighting": "equal",
+  "weighting": "invvol",
   "market_filter": true
  }
 }
