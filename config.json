@@ -1,7 +1,7 @@
 {
  "nse": {
   "top": 25,
-  "max_sector": 1,
+  "max_sector": 0.3,
   "weighting": "equal",
   "market_filter": true
  },
