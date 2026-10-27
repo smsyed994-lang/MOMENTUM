@@ -2,7 +2,7 @@
  "nse": {
   "top": 25,
   "max_sector": 0.4,
-  "weighting": "invvol",
+  "weighting": "equal",
   "market_filter": true
  },
  "us": {
